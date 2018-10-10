@@ -7,6 +7,7 @@ var cssmin      = require('gulp-cssmin')
 var rename      = require('gulp-rename')
 var htmlmin     = require('gulp-htmlmin')
 var uglify      = require('gulp-uglify')
+var notify      = require('gulp-notify')
 var browserSync = require('browser-sync')
 var reload      = browserSync.reload;
 
@@ -16,9 +17,16 @@ var reload      = browserSync.reload;
 //////////////////////////////
 gulp.task('styles', function(){
     gulp.src('./src/sass/main.sass')
-    .pipe(sass())
-    .on('error', sass.logError)
+    //.pipe(sass())
+    //.on('error', sass.logError)
+    .pipe( sass().on( 'error', notify.onError(
+      {
+        message: "<%= error.message %>",
+        title  : "Sass Error!"
+      } ) )
+    )
     .pipe(gulp.dest('./src/css'))
+    .pipe(notify('SASS - хорошая работа!'))
     .pipe(reload({stream:true}))
 
 })
